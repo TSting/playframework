@@ -4,3 +4,5 @@
 -J-XX:MaxInlineLevel=18
 -J-XX:MaxMetaspaceSize=1G
 -J-Dfile.encoding=UTF-8
+-J--add-exports=java.base/sun.security.x509=ALL-UNNAMED
+-J--add-opens=java.base/sun.security.ssl=ALL-UNNAMED

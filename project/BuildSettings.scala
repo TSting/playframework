@@ -90,6 +90,36 @@ object BuildSettings {
         case _                       => Seq()
       }
     },
+
+    Compile / javacOptions := Seq(
+      "-g",
+      "-encoding",
+      "UTF-8",
+      "-source",
+      "17",
+      "-target",
+      "17",
+      "-parameters",
+      "-Xlint:unchecked",
+      "-Xlint:deprecation"
+    ),
+
+    Test / javacOptions := Seq(
+      "-g",
+      "-encoding",
+      "UTF-8",
+      "-source",
+      "17",
+      "-target",
+      "17",
+      "-parameters",
+      "-Xlint:unchecked",
+      "-Xlint:deprecation"
+    ),
+
+    Compile / doc / javacOptions := Seq("-noqualifier", "java.lang", "-encoding", "UTF-8", "-source", "17"),
+
+
     (Test / fork) := true,
     (Test / parallelExecution) := false,
     (Test / test / testListeners) := Nil,
@@ -365,7 +395,31 @@ object BuildSettings {
       .settings(playRuntimeSettings: _*)
       .settings(omnidocSettings: _*)
       .settings(
-        scalacOptions += "-target:jvm-1.8"
+        Compile / javacOptions := Seq(
+          "-g",
+          "-encoding",
+          "UTF-8",
+          "-source",
+          "17",
+          "-target",
+          "17",
+          "-parameters",
+          "-Xlint:unchecked",
+          "-Xlint:deprecation"
+        ),
+
+        Test / javacOptions := Seq(
+          "-g",
+          "-encoding",
+          "UTF-8",
+          "-source",
+          "17",
+          "-target",
+          "17",
+          "-parameters",
+          "-Xlint:unchecked",
+          "-Xlint:deprecation"
+        ),
       )
   }
 

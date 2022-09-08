@@ -7,8 +7,8 @@ import Keys._
 import buildinfo.BuildInfo
 
 object Dependencies {
-  val akkaVersion: String = sys.props.getOrElse("akka.version", "2.6.14")
-  val akkaHttpVersion     = sys.props.getOrElse("akka.http.version", "10.1.14")
+  val akkaVersion: String = sys.props.getOrElse("akka.version", "2.6.20")
+  val akkaHttpVersion     = sys.props.getOrElse("akka.http.version", "10.2.10")
 
   val sslConfig = "com.typesafe" %% "ssl-config-core" % "0.4.3"
 
@@ -80,7 +80,7 @@ object Dependencies {
   )
 
   def scalaReflect(scalaVersion: String) = "org.scala-lang" % "scala-reflect" % scalaVersion % "provided"
-  val scalaJava8Compat                   = "org.scala-lang.modules" %% "scala-java8-compat" % "0.9.1"
+  val scalaJava8Compat                   = "org.scala-lang.modules" %% "scala-java8-compat" % "1.0.0"
   val scalaParserCombinators             = Seq("org.scala-lang.modules" %% "scala-parser-combinators" % "1.1.2")
 
   val springFrameworkVersion = "5.3.10"
@@ -162,7 +162,7 @@ object Dependencies {
 
   val jimfs = "com.google.jimfs" % "jimfs" % "1.2"
 
-  val okHttp = "com.squareup.okhttp3" % "okhttp" % "4.9.2"
+  val okHttp = "com.squareup.okhttp3" % "okhttp" % "5.0.0-alpha.2"
 
   def routesCompilerDependencies(scalaVersion: String) = {
     specs2Deps.map(_ % Test) ++ Seq(specsMatcherExtra % Test) ++ scalaParserCombinators ++ (logback % Test :: Nil)
