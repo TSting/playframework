@@ -223,14 +223,14 @@ public class DynamicForm extends Form<DynamicForm.Dynamic> {
   public Map<String, String> rawData() {
     return Collections.unmodifiableMap(
         super.rawData().entrySet().stream()
-            .collect(Collectors.toMap(e -> asNormalKey(e.getKey()), e -> e.getValue())));
+            .collect(Collectors.toMap(e -> asNormalKey(e.getKey()), Map.Entry::getValue)));
   }
 
   @Override
   public Map<String, Http.MultipartFormData.FilePart<?>> files() {
     return Collections.unmodifiableMap(
         super.files().entrySet().stream()
-            .collect(Collectors.toMap(e -> asNormalKey(e.getKey()), e -> e.getValue())));
+            .collect(Collectors.toMap(e -> asNormalKey(e.getKey()), Map.Entry::getValue)));
   }
 
   /**
@@ -292,7 +292,9 @@ public class DynamicForm extends Form<DynamicForm.Dynamic> {
         attrs,
         play.libs.Scala.asJava(
             play.api.data.FormUtils.fromJson(
-                play.api.libs.json.Json.parse(play.libs.Json.stringify(data)), maxChars)),
+                play.api.libs.json.Json.parse(play.libs.Json.stringify(data)),
+                maxChars,
+                maxJsonDepth())),
         allowedFields);
   }
 
@@ -314,9 +316,9 @@ public class DynamicForm extends Form<DynamicForm.Dynamic> {
             lang,
             attrs,
             data.entrySet().stream()
-                .collect(Collectors.toMap(e -> asDynamicKey(e.getKey()), e -> e.getValue())),
+                .collect(Collectors.toMap(e -> asDynamicKey(e.getKey()), Map.Entry::getValue)),
             files.entrySet().stream()
-                .collect(Collectors.toMap(e -> asDynamicKey(e.getKey()), e -> e.getValue())),
+                .collect(Collectors.toMap(e -> asDynamicKey(e.getKey()), Map.Entry::getValue)),
             allowedFields);
     return new DynamicForm(
         form.rawData(),

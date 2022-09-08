@@ -104,7 +104,7 @@ trait HeadActionSpec
       val getHeaders: HttpHeaders = responses(1).underlying[NettyResponse].getHeaders
 
       // Exclude `Date` header because it can vary between requests
-      import scala.collection.JavaConverters._
+      import scala.jdk.CollectionConverters._
       val firstHeaders  = headHeaders.remove(DATE)
       val secondHeaders = getHeaders.remove(DATE)
 
@@ -137,8 +137,7 @@ trait HeadActionSpec
     val CustomAttr = TypedKey[String]("CustomAttr")
     val attrAction = ActionBuilder.ignoringBody { (rh: RequestHeader) =>
       val attrComment = rh.attrs.get(CustomAttr)
-      val headers = Array.empty[(String, String)] ++
-        rh.attrs.get(CustomAttr).map("CustomAttr" -> _)
+      val headers     = rh.attrs.get(CustomAttr).map("CustomAttr" -> _).toSeq
       Results.Ok.withHeaders(headers: _*)
     }
 

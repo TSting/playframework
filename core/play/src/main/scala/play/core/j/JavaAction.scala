@@ -14,7 +14,7 @@ import play.api.http.HttpConfiguration
 import play.api.inject.Injector
 import play.api.Logger
 
-import scala.compat.java8.FutureConverters
+import scala.jdk.FutureConverters._
 import scala.language.existentials
 import play.core.Execution.Implicits.trampoline
 import play.api.mvc._
@@ -28,7 +28,8 @@ import play.libs.AnnotationUtils
 import play.mvc.Http.{ Request => JRequest }
 import play.mvc.Http.{ RequestImpl => JRequestImpl }
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
+import scala.collection.immutable.ArraySeq
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 
@@ -52,14 +53,15 @@ class JavaActionAnnotations(
       .map(_.value)
       .getOrElse(classOf[JBodyParser.Default])
 
-  val controllerAnnotations: Seq[(Annotation, AnnotatedElement)] = play.api.libs.Collections
-    .unfoldLeft[Seq[(Annotation, AnnotatedElement)], Option[Class[_]]](Option(controller)) { clazz =>
-      clazz.map(c => (Option(c.getSuperclass), c.getDeclaredAnnotations.map((_, c)).toSeq))
+  val controllerAnnotations: Seq[(Annotation, AnnotatedElement)] = Seq
+    .unfold[Seq[(Annotation, AnnotatedElement)], Option[Class[_]]](Option(controller)) { clazz =>
+      clazz.map(c => (c.getDeclaredAnnotations.map((_, c)).toSeq, Option(c.getSuperclass)))
     }
+    .reverse
     .flatten
 
   val actionMixins: Seq[(Annotation, Class[_ <: JAction[_]], AnnotatedElement)] = {
-    val methodAnnotations = method.getDeclaredAnnotations.map((_, method))
+    val methodAnnotations = ArraySeq.unsafeWrapArray(method.getDeclaredAnnotations.map((_, method)))
     val allDeclaredAnnotations: Seq[(java.lang.annotation.Annotation, AnnotatedElement)] =
       if (config.controllerAnnotationsFirst) {
         controllerAnnotations ++ methodAnnotations
@@ -152,14 +154,13 @@ abstract class JavaAction(val handlerComponents: JavaHandlerComponents)
       new HttpExecutionContext(javaClassLoader, trampoline)
     }
     if (logger.isDebugEnabled) {
-      val actionChain = play.api.libs.Collections
-        .unfoldLeft[JAction[_], Option[JAction[_]]](Option(firstAction)) { action =>
-          action.map(a => (Option(a.delegate), a))
+      val actionChain = Seq
+        .unfold[JAction[_], Option[JAction[_]]](Option(firstAction)) { action =>
+          action.map(a => (a, Option(a.delegate)))
         }
-        .reverse
       logger.debug("### Start of action order")
       actionChain
-        .zip(Stream.from(1))
+        .zip(LazyList.from(1))
         .foreach({
           case (action, index) =>
             logger.debug(
@@ -172,7 +173,7 @@ abstract class JavaAction(val handlerComponents: JavaHandlerComponents)
       logger.debug("### End of action order")
     }
     val actionFuture: Future[Future[JResult]] = Future {
-      FutureConverters.toScala(firstAction.call(javaRequest))
+      firstAction.call(javaRequest).asScala
     }(trampolineWithContext)
     val flattenedActionFuture: Future[JResult] = actionFuture.flatMap(identity)(trampoline)
     val resultFuture: Future[Result]           = flattenedActionFuture.map(_.asScala)(trampoline)

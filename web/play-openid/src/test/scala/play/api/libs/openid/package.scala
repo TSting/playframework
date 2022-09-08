@@ -9,7 +9,7 @@ import play.shaded.ahc.io.netty.handler.codec.http.QueryStringDecoder
 import java.net.MalformedURLException
 import java.net.URL
 import util.control.Exception._
-import collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 import scala.language.implicitConversions
 
@@ -18,7 +18,7 @@ package object openid {
 
   implicit def stringToSeq(s: String): Seq[String] = Seq(s)
 
-  implicit def urlToRichUrl(url: URL) = new RichUrl[URL] {
+  implicit def urlToRichUrl(url: URL): RichUrl[URL] = new RichUrl[URL] {
     def hostAndPath = new URL(url.getProtocol, url.getHost, url.getPort, url.getPath).toExternalForm
   }
 
@@ -30,7 +30,7 @@ package object openid {
     catching(classOf[MalformedURLException])
       .opt(new URL(url))
       .map { url =>
-        new QueryStringDecoder(url.toURI.getRawQuery, false).parameters().asScala.mapValues(_.asScala.toSeq).toMap
+        new QueryStringDecoder(url.toURI.getRawQuery, false).parameters().asScala.view.mapValues(_.asScala.toSeq).toMap
       }
       .getOrElse(Map())
   }

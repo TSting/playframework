@@ -61,7 +61,6 @@ lazy val PlayExceptionsProject = PlayNonCrossBuiltProject("Play-Exceptions", "co
 
 lazy val billOfMaterials = PlayCrossBuiltProject("bill-of-materials", "dev-mode/bill-of-materials")
   .enablePlugins(BillOfMaterialsPlugin)
-  .disablePlugins(MimaPlugin)
   .settings(
     publishTo := Some(Resolver.file("file", new File("/Users/gideondk/Development/kriskras-mvn-repo"))),
     name := "play-bom",
@@ -291,7 +290,7 @@ lazy val SbtPluginProject = PlaySbtPluginProject("Sbt-Plugin", "dev-mode/sbt-plu
 lazy val SbtScriptedToolsProject = PlaySbtPluginProject("Sbt-Scripted-Tools", "dev-mode/sbt-scripted-tools")
   .enablePlugins(SbtPlugin)
   .dependsOn(SbtPluginProject)
-  .settings(disableNonLocalPublishing,publishTo := Some(Resolver.file("file", new File("/Users/gideondk/Development/kriskras-mvn-repo"))))
+  .settings(publishTo := Some(Resolver.file("file", new File("/Users/gideondk/Development/kriskras-mvn-repo"))))
 
 lazy val PlayLogback = PlayCrossBuiltProject("Play-Logback", "core/play-logback")
   .settings(
@@ -534,7 +533,6 @@ lazy val nonUserProjects = Seq[ProjectReference](
 
 lazy val PlayFramework = Project("Play-Framework", file("."))
   .enablePlugins(PlayRootProject)
-  .enablePlugins(PlayWhitesourcePlugin)
   .settings(
     playCommonSettings,
     scalaVersion := (PlayProject / scalaVersion).value,
@@ -542,6 +540,7 @@ lazy val PlayFramework = Project("Play-Framework", file("."))
     dependencyOverrides ++= Seq(
       "org.scala-lang.modules" %% "scala-java8-compat" % "1.0.0"
     ),
+    crossScalaVersions := Nil,
     (ThisBuild / playBuildRepoName) := "playframework",
     (Global / concurrentRestrictions) += Tags.limit(Tags.Test, 1),
     libraryDependencies ++= (runtime(scalaVersion.value) ++ jdbcDeps),
@@ -550,9 +549,21 @@ lazy val PlayFramework = Project("Play-Framework", file("."))
     mimaReportBinaryIssues := (()),
     commands += Commands.quickPublish,
     publishTo := Some(Resolver.file("file", new File("/Users/gideondk/Development/kriskras-mvn-repo"))),
-    Release.settings
+    Release.settings,
+    publish / skip := true,
   )
   .aggregate((userProjects ++ nonUserProjects): _*)
 
 ThisBuild / version ~= (x => "2.9.1-SNAPSHOT")
 ThisBuild / dynver  ~= (x => "2.9.1-SNAPSHOT")
+
+addCommandAlias(
+  "validateCode",
+  List(
+    "headerCheckAll",
+    "scalafmtSbtCheck",
+    "scalafmtCheckAll",
+    "javafmtCheckAll",
+    "+checkAkkaModuleVersions"
+  ).mkString(";")
+)

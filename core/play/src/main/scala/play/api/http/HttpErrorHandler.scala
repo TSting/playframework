@@ -23,7 +23,7 @@ import play.utils.PlayIO
 import play.utils.Reflect
 
 import scala.annotation.tailrec
-import scala.compat.java8.FutureConverters
+import scala.jdk.FutureConverters._
 import scala.concurrent._
 import scala.util.Failure
 import scala.util.Success
@@ -521,7 +521,7 @@ class JsonHttpErrorHandler(environment: Environment, sourceMapper: Option[Source
  * Note: this HttpErrorHandler should ONLY be used in DEV or TEST. The way this displays errors to the user is
  * generally not suitable for a production environment.
  */
-object DefaultHttpErrorHandler
+object DevHttpErrorHandler
     extends DefaultHttpErrorHandler(HttpErrorConfig(showDevErrors = true, playEditor = None), None, None) {
   private val logger = Logger(getClass)
   private lazy val setEditor: Unit =
@@ -546,6 +546,15 @@ object DefaultHttpErrorHandler
 }
 
 /**
+ * A fallback default HTTP error handler that can be used when there's no application available.
+ *
+ *  Note: this HttpErrorHandler uses the default `HttpErrorConfig`, which does not `showDevErrors`.
+ *  It is largely here to preserve binary compatibility, but should be overridden with an injected
+ *  HttpErrorHandler.
+ */
+object DefaultHttpErrorHandler extends DefaultHttpErrorHandler(HttpErrorConfig(), None, None)
+
+/**
  * A Java error handler that's provided when a Scala one is configured, so that Java code can still have the error
  * handler injected.
  */
@@ -554,8 +563,8 @@ private[play] class JavaHttpErrorHandlerDelegate @Inject() (delegate: HttpErrorH
   import play.core.Execution.Implicits.trampoline
 
   def onClientError(request: Http.RequestHeader, statusCode: Int, message: String): CompletionStage[play.mvc.Result] =
-    FutureConverters.toJava(delegate.onClientError(request.asScala(), statusCode, message).map(_.asJava))
+    delegate.onClientError(request.asScala(), statusCode, message).map(_.asJava).asJava
 
   def onServerError(request: Http.RequestHeader, exception: Throwable): CompletionStage[play.mvc.Result] =
-    FutureConverters.toJava(delegate.onServerError(request.asScala(), exception).map(_.asJava))
+    delegate.onServerError(request.asScala(), exception).map(_.asJava).asJava
 }

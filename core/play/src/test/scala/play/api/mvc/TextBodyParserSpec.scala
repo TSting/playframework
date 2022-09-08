@@ -23,11 +23,11 @@ import scala.concurrent.Await
  *
  */
 class TextBodyParserSpec extends Specification with AfterAll {
-  implicit val system = ActorSystem()
-  implicit val mat    = Materializer.matFromSystem
-  val parse           = PlayBodyParsers()
+  implicit val system: ActorSystem = ActorSystem()
+  implicit val mat: Materializer   = Materializer.matFromSystem
+  val parse                        = PlayBodyParsers()
 
-  override def afterAll: Unit = {
+  override def afterAll(): Unit = {
     system.terminate()
   }
 

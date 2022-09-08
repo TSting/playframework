@@ -1,4 +1,5 @@
 <!--- Copyright (C) Lightbend Inc. <https://www.lightbend.com> -->
+
 # Allowed hosts filter
 
 Play provides a filter that lets you configure which hosts can access your application. This is useful to prevent cache poisoning attacks. For a detailed description of how this attack works, see [this blog post](https://www.skeletonscribe.net/2013/05/practical-http-host-header-attacks.html). The filter introduces a whitelist of allowed hosts and sends a 400 (Bad Request) response to all requests with a host that do not match the whitelist.
@@ -51,7 +52,7 @@ With this configuration, routes tagged with `anyhost` will be exempt from the al
 GET           /healthcheck          controllers.HealthController.healthcheck
 ```
 
-If the whitelist is empty and the blacklist is defined, the allowed hosts filter will only be applied to hosts defined in the blacklist. For example, the following config will only apply the allowed hosts filter to routes tagged with `external`.
+If the whitelist is empty and the blacklist is defined, the allowed hosts filter will only be applied to routes that are tagged with a tag present in the blacklist configuration. For example, the following config will only apply the allowed hosts filter to routes tagged with `external`.
 
 ```
 play.filters.hosts.routeModifiers.whiteList = []

@@ -30,9 +30,9 @@ import play.libs.XML;
 import play.libs.streams.Accumulator;
 import play.mvc.Http.Status;
 import scala.Option;
-import scala.collection.JavaConverters;
-import scala.compat.java8.FutureConverters;
-import scala.compat.java8.OptionConverters;
+import scala.jdk.javaapi.CollectionConverters;
+import scala.jdk.javaapi.FutureConverters;
+import scala.jdk.javaapi.OptionConverters;
 import scala.concurrent.Future;
 import scala.runtime.AbstractFunction1;
 
@@ -54,7 +54,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static java.nio.charset.StandardCharsets.*;
-import static scala.collection.JavaConverters.seqAsJavaListConverter;
 
 /** A body parser parses the HTTP request body content. */
 public interface BodyParser<A> {
@@ -575,7 +574,7 @@ public interface BodyParser<A> {
             takeUpToFlow.toMat(
                 result,
                 (statusFuture, resultFuture) ->
-                    FutureConverters.toJava(statusFuture)
+                    FutureConverters.asJava(statusFuture)
                         .thenCompose(
                             status -> {
                               if (status instanceof MaxSizeNotExceeded$) {
@@ -803,9 +802,9 @@ public interface BodyParser<A> {
           .map(
               result -> {
                 if (result.isLeft()) {
-                  return F.Either.Left(result.left().get().asJava());
+                  return F.Either.Left(result.swap().toOption().get().asJava());
                 } else {
-                  final play.api.mvc.MultipartFormData<A> scalaData = result.right().get();
+                  final play.api.mvc.MultipartFormData<A> scalaData = result.toOption().get();
                   return F.Either.Right(new DelegatingMultipartFormData(scalaData));
                 }
               },
@@ -826,7 +825,7 @@ public interface BodyParser<A> {
       @Override
       public Map<String, String[]> asFormUrlEncoded() {
         // TODO have this transformations in Scala is easier.
-        return JavaConverters.mapAsJavaMap(scalaFormData.asFormUrlEncoded()).entrySet().stream()
+        return CollectionConverters.asJava(scalaFormData.asFormUrlEncoded()).entrySet().stream()
             .collect(
                 Collectors.toMap(
                     Map.Entry::getKey, entry -> Scala.asArray(String.class, entry.getValue())));
@@ -834,7 +833,7 @@ public interface BodyParser<A> {
 
       @Override
       public List<FilePart<A>> getFiles() {
-        return seqAsJavaListConverter(scalaFormData.files()).asJava().stream()
+        return CollectionConverters.asJava(scalaFormData.files()).stream()
             .map(DelegatingMultipartFormDataBodyParser.this::toJava)
             .collect(Collectors.toList());
       }

@@ -19,8 +19,8 @@ import play.api.mvc.Results$;
 import play.core.j.JavaHelpers;
 import play.http.HttpEntity;
 import play.twirl.api.Content;
-import scala.collection.JavaConverters;
-import scala.compat.java8.OptionConverters;
+import scala.jdk.javaapi.CollectionConverters;
+import scala.jdk.javaapi.OptionConverters;
 
 import static play.mvc.Http.HeaderNames.LOCATION;
 import static play.mvc.Http.Status.*;
@@ -47,7 +47,7 @@ public class Results {
    */
   public static Map<String, String> contentDispositionHeader(
       boolean inline, Optional<String> name) {
-    return JavaConverters.mapAsJavaMap(
+    return CollectionConverters.asJava(
         play.api.mvc.Results.contentDispositionHeader(inline, OptionConverters.toScala(name)));
   }
 

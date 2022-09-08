@@ -20,12 +20,12 @@ import play.api.mvc.Results
 import play.mvc.{ Results => JResults }
 import play.twirl.api.Html
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 class TemplatesSpec extends Specification {
   "toHtmlArgs" should {
     "escape attribute values" in {
-      PlayMagic.toHtmlArgs(Map('foo -> """bar <>&"'""")).body must_== """foo="bar &lt;&gt;&amp;&quot;&#x27;""""
+      PlayMagic.toHtmlArgs(Map(Symbol("foo") -> """bar <>&"'""")).body must_== """foo="bar &lt;&gt;&amp;&quot;&#x27;""""
     }
   }
 

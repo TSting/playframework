@@ -138,7 +138,7 @@ public class Constraints {
     return constraints
         .parallelStream()
         .filter(c -> c.getAnnotation().annotationType().isAnnotationPresent(Display.class))
-        .map(c -> displayableConstraint(c))
+        .map(Constraints::displayableConstraint)
         .collect(Collectors.toList());
   }
 
@@ -155,7 +155,9 @@ public class Constraints {
   public static List<Tuple<String, List<Object>>> displayableConstraint(
       Set<ConstraintDescriptor<?>> constraints, Annotation[] orderedAnnotations) {
     final List<Annotation> constraintAnnot =
-        constraints.stream().map(c -> c.getAnnotation()).collect(Collectors.<Annotation>toList());
+        constraints.stream()
+            .map(ConstraintDescriptor::getAnnotation)
+            .collect(Collectors.<Annotation>toList());
 
     return Stream.of(orderedAnnotations)
         .filter(
@@ -552,7 +554,7 @@ public class Constraints {
     public static final String message = "error.email";
     static final java.util.regex.Pattern regex =
         java.util.regex.Pattern.compile(
-            "\\b[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*\\b");
+            "^[a-zA-Z0-9\\.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$");
 
     public EmailValidator() {}
 

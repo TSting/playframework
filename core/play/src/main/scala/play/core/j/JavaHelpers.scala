@@ -36,8 +36,8 @@ import play.mvc.Http.{ RequestHeader => JRequestHeader }
 import play.mvc.Http.{ RequestImpl => JRequestImpl }
 import play.mvc.Http
 
-import scala.collection.JavaConverters._
-import scala.compat.java8.OptionConverters
+import scala.jdk.CollectionConverters._
+import scala.jdk.OptionConverters._
 
 /**
  * Provides helper methods that manage Java to Scala Result and Scala to Java Context
@@ -52,7 +52,7 @@ trait JavaHelpers {
     new JCookies {
       override def get(name: String): Optional[JCookie] = Optional.ofNullable(cookies.get(name).map(_.asJava).orNull)
 
-      def iterator: java.util.Iterator[JCookie] = cookies.toIterator.map(_.asJava).asJava
+      def iterator: java.util.Iterator[JCookie] = cookies.iterator.map(_.asJava).asJava
     }
   }
 
@@ -188,7 +188,7 @@ trait JavaHelpers {
 
 object JavaHelpers extends JavaHelpers {
   def javaMapOfListToImmutableScalaMapOfSeq[A, B](javaMap: java.util.Map[A, java.util.List[B]]): Map[A, Seq[B]] = {
-    javaMap.asScala.mapValues(_.asScala.toSeq).toMap
+    javaMap.asScala.view.mapValues(_.asScala.toSeq).toMap
   }
 }
 
@@ -219,7 +219,7 @@ class RequestHeaderImpl(header: RequestHeader) extends JRequestHeader {
 
   override def acceptLanguages: util.List[i18n.Lang] = header.acceptLanguages.map(new play.i18n.Lang(_)).asJava
 
-  override def queryString: util.Map[String, Array[String]] = header.queryString.mapValues(_.toArray).toMap.asJava
+  override def queryString: util.Map[String, Array[String]] = header.queryString.view.mapValues(_.toArray).toMap.asJava
 
   override def acceptedTypes: util.List[MediaRange] = header.acceptedTypes.asJava
 
@@ -227,14 +227,14 @@ class RequestHeaderImpl(header: RequestHeader) extends JRequestHeader {
 
   override def cookies = JavaHelpers.cookiesToJavaCookies(header.cookies)
 
-  override def clientCertificateChain() = OptionConverters.toJava(header.clientCertificateChain.map(_.asJava))
+  override def clientCertificateChain() = header.clientCertificateChain.map(_.asJava).toJava
 
   @deprecated
   override def getQueryString(key: String): String = {
     if (queryString().containsKey(key) && queryString().get(key).length > 0) queryString().get(key)(0) else null
   }
 
-  override def queryString(key: String): Optional[String] = OptionConverters.toJava(header.getQueryString(key))
+  override def queryString(key: String): Optional[String] = header.getQueryString(key).toJava
 
   @deprecated override def cookie(name: String): JCookie = cookies().get(name).orElse(null)
 
@@ -242,9 +242,9 @@ class RequestHeaderImpl(header: RequestHeader) extends JRequestHeader {
 
   override def hasBody: Boolean = header.hasBody
 
-  override def contentType(): Optional[String] = OptionConverters.toJava(header.contentType)
+  override def contentType(): Optional[String] = (header.contentType).toJava
 
-  override def charset(): Optional[String] = OptionConverters.toJava(header.charset)
+  override def charset(): Optional[String] = (header.charset).toJava
 
   override def withTransientLang(lang: play.i18n.Lang): JRequestHeader = addAttr(i18n.Messages.Attrs.CurrentLang, lang)
 

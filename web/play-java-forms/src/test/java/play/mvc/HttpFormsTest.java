@@ -12,7 +12,6 @@ import play.Environment;
 import play.api.i18n.DefaultLangs;
 import play.data.*;
 import play.data.format.Formatters;
-import play.data.Task;
 import play.data.validation.ValidationError;
 import play.i18n.Lang;
 import play.i18n.MessagesApi;
@@ -55,7 +54,7 @@ public class HttpFormsTest {
   }
 
   private <T> Form<T> copyFormWithoutRawData(final Form<T> formToCopy, final Application app) {
-    return new Form<T>(
+    return new Form<>(
         formToCopy.name(),
         formToCopy.getBackedType(),
         null,

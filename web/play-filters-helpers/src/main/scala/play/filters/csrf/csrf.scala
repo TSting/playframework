@@ -29,7 +29,7 @@ import play.filters.csrf.CSRF._
 import play.mvc.Http
 import play.utils.Reflect
 
-import scala.compat.java8.FutureConverters
+import scala.jdk.FutureConverters._
 import scala.concurrent.Future
 
 /**
@@ -70,12 +70,12 @@ case class CSRFConfig(
 
   import play.mvc.Http.{ RequestHeader => JRequestHeader }
 
-  import scala.compat.java8.FunctionConverters._
-  import scala.compat.java8.OptionConverters._
+  import scala.jdk.FunctionConverters._
+  import scala.jdk.OptionConverters._
 
   def withTokenName(tokenName: String)                = copy(tokenName = tokenName)
   def withHeaderName(headerName: String)              = copy(headerName = headerName)
-  def withCookieName(cookieName: ju.Optional[String]) = copy(cookieName = cookieName.asScala)
+  def withCookieName(cookieName: ju.Optional[String]) = copy(cookieName = cookieName.toScala)
   def withSecureCookie(isSecure: Boolean)             = copy(secureCookie = isSecure)
   def withHttpOnlyCookie(isHttpOnly: Boolean)         = copy(httpOnlyCookie = isHttpOnly)
   def withSameSiteCookie(sameSite: Option[SameSite])  = copy(sameSiteCookie = sameSite)
@@ -85,7 +85,7 @@ case class CSRFConfig(
   def withSignTokens(signTokens: Boolean)                     = copy(signTokens = signTokens)
   def withMethods(checkMethod: ju.function.Predicate[String]) = copy(checkMethod = checkMethod.asScala)
   def withContentTypes(checkContentType: ju.function.Predicate[Optional[String]]) =
-    copy(checkContentType = checkContentType.asScala.compose(_.asJava))
+    copy(checkContentType = checkContentType.asScala.compose(_.toJava))
   def withShouldProtect(shouldProtect: ju.function.Predicate[JRequestHeader]) =
     copy(shouldProtect = shouldProtect.asScala.compose(_.asJava))
   def withBypassCorsTrustedOrigins(bypass: Boolean) = copy(bypassCorsTrustedOrigins = bypass)
@@ -296,14 +296,14 @@ object CSRF {
       this(underlying)
     }
     def handle(request: RequestHeader, msg: String) =
-      FutureConverters.toScala(underlying.handle(request.asJava, msg)).map(_.asScala)(Execution.trampoline)
+      underlying.handle(request.asJava, msg).asScala.map(_.asScala)(Execution.trampoline)
   }
 
   class JavaCSRFErrorHandlerDelegate @Inject() (delegate: ErrorHandler) extends CSRFErrorHandler {
     import play.core.Execution.Implicits.trampoline
 
     def handle(requestHeader: Http.RequestHeader, msg: String) =
-      FutureConverters.toJava(delegate.handle(requestHeader.asScala(), msg).map(_.asJava))
+      delegate.handle(requestHeader.asScala(), msg).map(_.asJava).asJava
   }
 
   object ErrorHandler {

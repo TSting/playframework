@@ -18,7 +18,7 @@ class PathBindableExtractor[T](implicit pb: PathBindable[T]) {
    * Extract s to T if it can be bound, otherwise don't match.
    */
   def unapply(s: String): Option[T] = {
-    pb.bind("anon", s).right.toOption
+    pb.bind("anon", s).toOption
   }
 
   /**
@@ -39,7 +39,7 @@ class PathBindableExtractor[T](implicit pb: PathBindable[T]) {
     val bound = s.collect {
       case self(value) => value
     }
-    if (bound.length == s.length) {
+    if (bound.sizeIs == s.length) {
       Some(bound)
     } else {
       None

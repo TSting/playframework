@@ -21,13 +21,13 @@ import play.http.HttpErrorHandler
 import play.libs.F
 import play.mvc.Http.RequestBody
 
-import scala.compat.java8.OptionConverters._
+import scala.jdk.OptionConverters._
 
 class DefaultBodyParserSpec extends Specification with AfterAll with MustMatchers {
   "Java DefaultBodyParserSpec" title
 
-  implicit val system       = ActorSystem("default-body-parser-spec")
-  implicit val materializer = Materializer.matFromSystem
+  implicit val system: ActorSystem        = ActorSystem("default-body-parser-spec")
+  implicit val materializer: Materializer = Materializer.matFromSystem
 
   def afterAll(): Unit = {
     materializer.shutdown()
@@ -62,7 +62,7 @@ class DefaultBodyParserSpec extends Specification with AfterAll with MustMatcher
         new Http.RequestBuilder().method("POST").body(new RequestBody(body.utf8String), "text/plain").req
       postRequest.hasBody must beFalse
       parse(req(postRequest), body) must beRight[Object].like {
-        case empty: Optional[_] => empty.asScala must beNone
+        case empty: Optional[_] => empty.toScala must beNone
       }
     }
     "handle 'Content-Length: 1' header as non-empty body" in {
@@ -80,7 +80,7 @@ class DefaultBodyParserSpec extends Specification with AfterAll with MustMatcher
         new Http.RequestBuilder().method("POST").body(new RequestBody(null), "text/plain").req
       postRequest.hasBody must beFalse
       parse(req(postRequest), body) must beRight[Object].like {
-        case empty: Optional[_] => empty.asScala must beNone
+        case empty: Optional[_] => empty.toScala must beNone
       }
     }
     "handle missing Content-Length and Transfer-Encoding headers as empty body (containing Optional.empty)" in {
@@ -89,7 +89,7 @@ class DefaultBodyParserSpec extends Specification with AfterAll with MustMatcher
         new Http.RequestBuilder().method("POST").req
       postRequest.hasBody must beFalse
       parse(req(postRequest), body) must beRight[Object].like {
-        case empty: Optional[_] => empty.asScala must beNone
+        case empty: Optional[_] => empty.toScala must beNone
       }
     }
   }

@@ -8,7 +8,6 @@ import java.net._
 import javax.inject.Inject
 import javax.inject.Singleton
 
-import akka.util.ByteString
 import play.api.http.HeaderNames
 import play.api.inject._
 import play.api.libs.ws._
@@ -18,7 +17,6 @@ import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 import scala.util.control.Exception._
 import scala.util.matching.Regex
-import scala.xml.Elem
 import scala.xml.Node
 
 case class OpenIDServer(protocolVersion: String, url: String, delegate: Option[String])
@@ -145,8 +143,8 @@ class WsOpenIdClient @Inject() (ws: WSClient, discovery: Discovery)(implicit ec:
    * For internal use
    */
   def verifiedId(queryString: java.util.Map[String, Array[String]]): Future[UserInfo] = {
-    import scala.collection.JavaConverters._
-    verifiedId(queryString.asScala.toMap.mapValues(_.toSeq).toMap)
+    import scala.jdk.CollectionConverters._
+    verifiedId(queryString.asScala.toMap.view.mapValues(_.toSeq).toMap)
   }
 
   private def verifiedId(queryString: Map[String, Seq[String]]): Future[UserInfo] = {

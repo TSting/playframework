@@ -344,7 +344,7 @@ trait WebSocketSpec
       import play.core.routing.HandlerInvokerFactory
       import play.core.routing.HandlerInvokerFactory._
 
-      import scala.collection.JavaConverters._
+      import scala.jdk.CollectionConverters._
 
       implicit def toHandler[J <: AnyRef](
           javaHandler: => J
@@ -378,7 +378,7 @@ trait WebSocketSpec
 }
 
 trait WebSocketSpecMethods extends PlaySpecification with WsTestClient with ServerIntegrationSpecification {
-  // Extend the default spec timeout for Travis CI.
+  // Extend the default spec timeout for CI.
   implicit override def defaultAwaitTimeout = 10.seconds
 
   def withServer[A](webSocket: Application => Handler)(block: Application => A): A = {

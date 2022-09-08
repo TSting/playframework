@@ -1,4 +1,5 @@
 <!--- Copyright (C) Lightbend Inc. <https://www.lightbend.com> -->
+
 # Dependency Injection
 
 Dependency injection is a widely used design pattern that helps separate your components' behaviour from dependency resolution.  Play supports both runtime dependency injection based on [JSR 330](https://jcp.org/en/jsr/detail?id=330) (described in this page) and [[compile time dependency injection|ScalaCompileTimeDependencyInjection]] in Scala.
@@ -6,6 +7,12 @@ Dependency injection is a widely used design pattern that helps separate your co
 Runtime dependency injection is so called because the dependency graph is created, wired and validated at runtime.  If a dependency cannot be found for a particular component, you won't get an error until you run your application.
 
 Play supports [Guice](https://github.com/google/guice) out of the box, but other JSR 330 implementations can be plugged in. The [Guice wiki](https://github.com/google/guice/wiki/) is a great resource for learning more about the features of Guice and DI design patterns in general.
+
+Play's sbt plugins do not provide any specific dependency injection framework by default. If you want to use Play's Guice module, add it explicitly to your library dependencies as follows:
+
+```scala	
+libraryDependencies += guice	
+``` 
 
 > **Note:** Guice is a Java library and the examples in this documentation use Guice's built-in Java API. If you prefer a Scala DSL you might wish to use the [scala-guice](https://github.com/codingwell/scala-guice) or [sse-guice](https://github.com/sptz45/sse-guice) library.
 

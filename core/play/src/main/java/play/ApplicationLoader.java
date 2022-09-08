@@ -14,7 +14,7 @@ import play.api.inject.DefaultApplicationLifecycle;
 import play.core.SourceMapper;
 import play.inject.ApplicationLifecycle;
 import play.libs.Scala;
-import scala.compat.java8.OptionConverters;
+import scala.jdk.javaapi.OptionConverters;
 
 /**
  * Loads an application. This is responsible for instantiating an application given a context.
@@ -51,7 +51,7 @@ public interface ApplicationLoader {
   /**
    * Load an application given the context.
    *
-   * @param context the context the apps hould be loaded into
+   * @param context the context the apps should be loaded into
    * @return the loaded application
    */
   Application load(ApplicationLoader.Context context);

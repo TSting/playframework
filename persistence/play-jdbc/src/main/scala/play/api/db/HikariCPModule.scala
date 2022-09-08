@@ -39,8 +39,6 @@ trait HikariCPComponents {
 class HikariCPConnectionPool @Inject() (environment: Environment) extends ConnectionPool {
   private val logger = Logger(getClass)
 
-  import HikariCPConnectionPool._
-
   /**
    * Create a data source with the given configuration.
    *
@@ -114,7 +112,7 @@ private[db] class HikariCPConfig private (
     dbConfig.username.foreach(hikariConfig.setUsername)
     dbConfig.password.foreach(hikariConfig.setPassword)
 
-    import scala.collection.JavaConverters._
+    import scala.jdk.CollectionConverters._
 
     val dataSourceConfig = config.get[Configuration]("dataSource")
     dataSourceConfig.underlying.root().keySet().asScala.foreach { key =>
