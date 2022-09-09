@@ -22,13 +22,13 @@ Global / onLoad := (Global / onLoad).value.andThen { s =>
 }
 
 lazy val BuildLinkProject = PlayNonCrossBuiltProject("Build-Link", "dev-mode/build-link")
-  .settings(publishTo := Some(Resolver.file("file", new File("/Users/gideondk/Development/kriskras-mvn-repo"))))
+  .settings(publishTo := Some(Resolver.file("file", new File("~/Development/sting-mvn-repo"))))
   .dependsOn(PlayExceptionsProject)
 
 // run-support project is only compiled against sbt scala version
 lazy val RunSupportProject = PlaySbtProject("Run-Support", "dev-mode/run-support")
   .settings(
-    publishTo := Some(Resolver.file("file", new File("/Users/gideondk/Development/kriskras-mvn-repo"))),
+    publishTo := Some(Resolver.file("file", new File("~/Development/sting-mvn-repo"))),
     target := target.value / "run-support",
     libraryDependencies ++= runSupportDependencies((pluginCrossBuild / sbtVersion).value)
   )
@@ -37,7 +37,7 @@ lazy val RunSupportProject = PlaySbtProject("Run-Support", "dev-mode/run-support
 lazy val RoutesCompilerProject = PlayDevelopmentProject("Routes-Compiler", "dev-mode/routes-compiler")
   .enablePlugins(SbtTwirl)
   .settings(
-    publishTo := Some(Resolver.file("file", new File("/Users/gideondk/Development/kriskras-mvn-repo"))),
+    publishTo := Some(Resolver.file("file", new File("~/Development/sting-mvn-repo"))),
     libraryDependencies ++= routesCompilerDependencies(scalaVersion.value),
     TwirlKeys.templateFormats := Map("twirl" -> "play.routes.compiler.ScalaFormat")
   )
@@ -45,7 +45,7 @@ lazy val RoutesCompilerProject = PlayDevelopmentProject("Routes-Compiler", "dev-
 lazy val SbtRoutesCompilerProject = PlaySbtProject("Sbt-Routes-Compiler", "dev-mode/routes-compiler")
   .enablePlugins(SbtTwirl)
   .settings(
-    publishTo := Some(Resolver.file("file", new File("/Users/gideondk/Development/kriskras-mvn-repo"))),
+    publishTo := Some(Resolver.file("file", new File("~/Development/sting-mvn-repo"))),
     target := target.value / "sbt-routes-compiler",
     libraryDependencies ++= routesCompilerDependencies(scalaVersion.value),
     TwirlKeys.templateFormats := Map("twirl" -> "play.routes.compiler.ScalaFormat")
@@ -53,16 +53,16 @@ lazy val SbtRoutesCompilerProject = PlaySbtProject("Sbt-Routes-Compiler", "dev-m
 
 lazy val StreamsProject = PlayCrossBuiltProject("Play-Streams", "core/play-streams")
   .settings(
-    publishTo := Some(Resolver.file("file", new File("/Users/gideondk/Development/kriskras-mvn-repo"))),
+    publishTo := Some(Resolver.file("file", new File("~/Development/sting-mvn-repo"))),
     libraryDependencies ++= streamsDependencies
   )
 
-lazy val PlayExceptionsProject = PlayNonCrossBuiltProject("Play-Exceptions", "core/play-exceptions").settings(publishTo := Some(Resolver.file("file", new File("/Users/gideondk/Development/kriskras-mvn-repo"))))
+lazy val PlayExceptionsProject = PlayNonCrossBuiltProject("Play-Exceptions", "core/play-exceptions").settings(publishTo := Some(Resolver.file("file", new File("~/Development/sting-mvn-repo"))))
 
 lazy val billOfMaterials = PlayCrossBuiltProject("bill-of-materials", "dev-mode/bill-of-materials")
   .enablePlugins(BillOfMaterialsPlugin)
   .settings(
-    publishTo := Some(Resolver.file("file", new File("/Users/gideondk/Development/kriskras-mvn-repo"))),
+    publishTo := Some(Resolver.file("file", new File("~/Development/sting-mvn-repo"))),
     name := "play-bom",
     bomIncludeProjects := userProjects,
     pomExtra := pomExtra.value :+ bomDependenciesListing.value,
@@ -71,7 +71,7 @@ lazy val billOfMaterials = PlayCrossBuiltProject("bill-of-materials", "dev-mode/
 
 lazy val PlayJodaFormsProject = PlayCrossBuiltProject("Play-Joda-Forms", "web/play-joda-forms")
   .settings(
-    publishTo := Some(Resolver.file("file", new File("/Users/gideondk/Development/kriskras-mvn-repo"))),
+    publishTo := Some(Resolver.file("file", new File("~/Development/sting-mvn-repo"))),
     libraryDependencies ++= joda
   )
   .dependsOn(PlayProject, PlaySpecs2Project % "test")
@@ -79,7 +79,7 @@ lazy val PlayJodaFormsProject = PlayCrossBuiltProject("Play-Joda-Forms", "web/pl
 lazy val PlayProject = PlayCrossBuiltProject("Play", "core/play")
   .enablePlugins(SbtTwirl)
   .settings(
-    publishTo := Some(Resolver.file("file", new File("/Users/gideondk/Development/kriskras-mvn-repo"))),
+    publishTo := Some(Resolver.file("file", new File("~/Development/sting-mvn-repo"))),
     libraryDependencies ++= runtime(scalaVersion.value) ++ scalacheckDependencies ++ cookieEncodingDependencies :+
       jimfs % Test,
     (Compile / sourceGenerators) += Def
@@ -121,7 +121,7 @@ lazy val PlayProject = PlayCrossBuiltProject("Play", "core/play")
 
 lazy val PlayServerProject = PlayCrossBuiltProject("Play-Server", "transport/server/play-server")
   .settings(
-    publishTo := Some(Resolver.file("file", new File("/Users/gideondk/Development/kriskras-mvn-repo"))),
+    publishTo := Some(Resolver.file("file", new File("~/Development/sting-mvn-repo"))),
     libraryDependencies ++= playServerDependencies
   )
   .dependsOn(
@@ -131,7 +131,7 @@ lazy val PlayServerProject = PlayCrossBuiltProject("Play-Server", "transport/ser
 
 lazy val PlayNettyServerProject = PlayCrossBuiltProject("Play-Netty-Server", "transport/server/play-netty-server")
   .settings(
-    publishTo := Some(Resolver.file("file", new File("/Users/gideondk/Development/kriskras-mvn-repo"))),
+    publishTo := Some(Resolver.file("file", new File("~/Development/sting-mvn-repo"))),
     libraryDependencies ++= netty
   )
   .dependsOn(PlayServerProject)
@@ -141,7 +141,7 @@ lazy val PlayAkkaHttpServerProject =
     .dependsOn(PlayServerProject, StreamsProject)
     .dependsOn(PlayGuiceProject % "test")
     .settings(
-      publishTo := Some(Resolver.file("file", new File("/Users/gideondk/Development/kriskras-mvn-repo"))),
+      publishTo := Some(Resolver.file("file", new File("~/Development/sting-mvn-repo"))),
       libraryDependencies ++= specs2Deps.map(_ % "test"),
       libraryDependencies += akkaHttp
     )
@@ -150,13 +150,13 @@ lazy val PlayAkkaHttp2SupportProject =
   PlayCrossBuiltProject("Play-Akka-Http2-Support", "transport/server/play-akka-http2-support")
     .dependsOn(PlayAkkaHttpServerProject)
     .settings(
-      publishTo := Some(Resolver.file("file", new File("/Users/gideondk/Development/kriskras-mvn-repo"))),
+      publishTo := Some(Resolver.file("file", new File("~/Development/sting-mvn-repo"))),
       libraryDependencies += akkaHttp2Support
     )
 
 lazy val PlayClusterSharding = PlayCrossBuiltProject("Play-Cluster-Sharding", "cluster/play-cluster-sharding")
   .settings(
-    publishTo := Some(Resolver.file("file", new File("/Users/gideondk/Development/kriskras-mvn-repo"))),
+    publishTo := Some(Resolver.file("file", new File("~/Development/sting-mvn-repo"))),
     libraryDependencies ++= clusterDependencies
   )
   .dependsOn(PlayProject)
@@ -164,18 +164,18 @@ lazy val PlayClusterSharding = PlayCrossBuiltProject("Play-Cluster-Sharding", "c
 lazy val PlayJavaClusterSharding =
   PlayCrossBuiltProject("Play-Java-Cluster-Sharding", "cluster/play-java-cluster-sharding")
     .settings(
-      publishTo := Some(Resolver.file("file", new File("/Users/gideondk/Development/kriskras-mvn-repo"))),
+      publishTo := Some(Resolver.file("file", new File("~/Development/sting-mvn-repo"))),
       libraryDependencies ++= clusterDependencies
     )
     .dependsOn(PlayProject)
 
 lazy val PlayJdbcApiProject = PlayCrossBuiltProject("Play-JDBC-Api", "persistence/play-jdbc-api")
   .dependsOn(PlayProject)
-  .settings(publishTo := Some(Resolver.file("file", new File("/Users/gideondk/Development/kriskras-mvn-repo"))))
+  .settings(publishTo := Some(Resolver.file("file", new File("~/Development/sting-mvn-repo"))))
 
 lazy val PlayJdbcProject: Project = PlayCrossBuiltProject("Play-JDBC", "persistence/play-jdbc")
   .settings(
-    publishTo := Some(Resolver.file("file", new File("/Users/gideondk/Development/kriskras-mvn-repo"))),
+    publishTo := Some(Resolver.file("file", new File("~/Development/sting-mvn-repo"))),
     libraryDependencies ++= jdbcDeps
   )
   .dependsOn(PlayJdbcApiProject)
@@ -183,7 +183,7 @@ lazy val PlayJdbcProject: Project = PlayCrossBuiltProject("Play-JDBC", "persiste
 
 lazy val PlayJdbcEvolutionsProject = PlayCrossBuiltProject("Play-JDBC-Evolutions", "persistence/play-jdbc-evolutions")
   .settings(
-    publishTo := Some(Resolver.file("file", new File("/Users/gideondk/Development/kriskras-mvn-repo"))),
+    publishTo := Some(Resolver.file("file", new File("~/Development/sting-mvn-repo"))),
     libraryDependencies += derbyDatabase % Test
   )
   .dependsOn(PlayJdbcApiProject)
@@ -192,13 +192,13 @@ lazy val PlayJdbcEvolutionsProject = PlayCrossBuiltProject("Play-JDBC-Evolutions
   .dependsOn(PlayJavaJdbcProject % "test")
 
 lazy val PlayJavaJdbcProject = PlayCrossBuiltProject("Play-Java-JDBC", "persistence/play-java-jdbc")
-  .settings(publishTo := Some(Resolver.file("file", new File("/Users/gideondk/Development/kriskras-mvn-repo"))))
+  .settings(publishTo := Some(Resolver.file("file", new File("~/Development/sting-mvn-repo"))))
   .dependsOn(PlayJdbcProject % "compile->compile;test->test", PlayJavaProject)
   .dependsOn(PlaySpecs2Project % "test", PlayGuiceProject % "test")
 
 lazy val PlayJpaProject = PlayCrossBuiltProject("Play-Java-JPA", "persistence/play-java-jpa")
   .settings(
-    publishTo := Some(Resolver.file("file", new File("/Users/gideondk/Development/kriskras-mvn-repo"))),
+    publishTo := Some(Resolver.file("file", new File("~/Development/sting-mvn-repo"))),
     libraryDependencies ++= jpaDeps
   )
   .dependsOn(PlayJavaJdbcProject % "compile->compile;test->test")
@@ -207,7 +207,7 @@ lazy val PlayJpaProject = PlayCrossBuiltProject("Play-Java-JPA", "persistence/pl
 
 lazy val PlayTestProject = PlayCrossBuiltProject("Play-Test", "testkit/play-test")
   .settings(
-    publishTo := Some(Resolver.file("file", new File("/Users/gideondk/Development/kriskras-mvn-repo"))),
+    publishTo := Some(Resolver.file("file", new File("~/Development/sting-mvn-repo"))),
     libraryDependencies ++= testDependencies ++ Seq(h2database % "test"),
     (Test / parallelExecution) := false
   )
@@ -221,7 +221,7 @@ lazy val PlayTestProject = PlayCrossBuiltProject("Play-Test", "testkit/play-test
 
 lazy val PlaySpecs2Project = PlayCrossBuiltProject("Play-Specs2", "testkit/play-specs2")
   .settings(
-    publishTo := Some(Resolver.file("file", new File("/Users/gideondk/Development/kriskras-mvn-repo"))),
+    publishTo := Some(Resolver.file("file", new File("~/Development/sting-mvn-repo"))),
     libraryDependencies ++= specs2Deps,
     (Test / parallelExecution) := false
   )
@@ -229,7 +229,7 @@ lazy val PlaySpecs2Project = PlayCrossBuiltProject("Play-Specs2", "testkit/play-
 
 lazy val PlayJavaProject = PlayCrossBuiltProject("Play-Java", "core/play-java")
   .settings(
-    publishTo := Some(Resolver.file("file", new File("/Users/gideondk/Development/kriskras-mvn-repo"))),
+    publishTo := Some(Resolver.file("file", new File("~/Development/sting-mvn-repo"))),
     libraryDependencies ++= javaDeps ++ javaTestDeps
   )
   .dependsOn(
@@ -241,7 +241,7 @@ lazy val PlayJavaProject = PlayCrossBuiltProject("Play-Java", "core/play-java")
 
 lazy val PlayJavaFormsProject = PlayCrossBuiltProject("Play-Java-Forms", "web/play-java-forms")
   .settings(
-    publishTo := Some(Resolver.file("file", new File("/Users/gideondk/Development/kriskras-mvn-repo"))),
+    publishTo := Some(Resolver.file("file", new File("~/Development/sting-mvn-repo"))),
     libraryDependencies ++= javaDeps ++ javaFormsDeps ++ javaTestDeps
   )
   .dependsOn(
@@ -251,14 +251,14 @@ lazy val PlayJavaFormsProject = PlayCrossBuiltProject("Play-Java-Forms", "web/pl
 lazy val PlayDocsProject = PlayCrossBuiltProject("Play-Docs", "dev-mode/play-docs")
   .settings(Docs.settings: _*)
   .settings(
-    publishTo := Some(Resolver.file("file", new File("/Users/gideondk/Development/kriskras-mvn-repo"))),
+    publishTo := Some(Resolver.file("file", new File("~/Development/sting-mvn-repo"))),
     libraryDependencies ++= playDocsDependencies
   )
   .dependsOn(PlayAkkaHttpServerProject)
 
 lazy val PlayGuiceProject = PlayCrossBuiltProject("Play-Guice", "core/play-guice")
   .settings(
-    publishTo := Some(Resolver.file("file", new File("/Users/gideondk/Development/kriskras-mvn-repo"))),
+    publishTo := Some(Resolver.file("file", new File("~/Development/sting-mvn-repo"))),
     libraryDependencies ++= guiceDeps ++ specs2Deps.map(_ % "test")
   )
   .dependsOn(
@@ -268,7 +268,7 @@ lazy val PlayGuiceProject = PlayCrossBuiltProject("Play-Guice", "core/play-guice
 lazy val SbtPluginProject = PlaySbtPluginProject("Sbt-Plugin", "dev-mode/sbt-plugin")
   .enablePlugins(SbtPlugin)
   .settings(
-    publishTo := Some(Resolver.file("file", new File("/Users/gideondk/Development/kriskras-mvn-repo"))),
+    publishTo := Some(Resolver.file("file", new File("~/Development/sting-mvn-repo"))),
     libraryDependencies ++= sbtDependencies((pluginCrossBuild / sbtVersion).value, scalaVersion.value),
     dependencyOverrides ++= Seq(
       "org.scala-lang.modules" %% "scala-java8-compat" % "1.0.0"
@@ -290,11 +290,11 @@ lazy val SbtPluginProject = PlaySbtPluginProject("Sbt-Plugin", "dev-mode/sbt-plu
 lazy val SbtScriptedToolsProject = PlaySbtPluginProject("Sbt-Scripted-Tools", "dev-mode/sbt-scripted-tools")
   .enablePlugins(SbtPlugin)
   .dependsOn(SbtPluginProject)
-  .settings(publishTo := Some(Resolver.file("file", new File("/Users/gideondk/Development/kriskras-mvn-repo"))))
+  .settings(publishTo := Some(Resolver.file("file", new File("~/Development/sting-mvn-repo"))))
 
 lazy val PlayLogback = PlayCrossBuiltProject("Play-Logback", "core/play-logback")
   .settings(
-    publishTo := Some(Resolver.file("file", new File("/Users/gideondk/Development/kriskras-mvn-repo"))),
+    publishTo := Some(Resolver.file("file", new File("~/Development/sting-mvn-repo"))),
     libraryDependencies += logback,
     (Test / parallelExecution) := false,
     // quieten deprecation warnings in tests
@@ -305,7 +305,7 @@ lazy val PlayLogback = PlayCrossBuiltProject("Play-Logback", "core/play-logback"
 
 lazy val PlayWsProject = PlayCrossBuiltProject("Play-WS", "transport/client/play-ws")
   .settings(
-    publishTo := Some(Resolver.file("file", new File("/Users/gideondk/Development/kriskras-mvn-repo"))),
+    publishTo := Some(Resolver.file("file", new File("~/Development/sting-mvn-repo"))),
     libraryDependencies ++= playWsDeps,
     (Test / parallelExecution) := false,
     // quieten deprecation warnings in tests
@@ -316,7 +316,7 @@ lazy val PlayWsProject = PlayCrossBuiltProject("Play-WS", "transport/client/play
 
 lazy val PlayAhcWsProject = PlayCrossBuiltProject("Play-AHC-WS", "transport/client/play-ahc-ws")
   .settings(
-    publishTo := Some(Resolver.file("file", new File("/Users/gideondk/Development/kriskras-mvn-repo"))),
+    publishTo := Some(Resolver.file("file", new File("~/Development/sting-mvn-repo"))),
     libraryDependencies ++= playAhcWsDeps,
     dependencyOverrides ++= Seq(
       "org.scala-lang.modules" %% "scala-java8-compat" % "1.0.0"
@@ -333,7 +333,7 @@ lazy val PlayAhcWsProject = PlayCrossBuiltProject("Play-AHC-WS", "transport/clie
 
 lazy val PlayOpenIdProject = PlayCrossBuiltProject("Play-OpenID", "web/play-openid")
   .settings(
-    publishTo := Some(Resolver.file("file", new File("/Users/gideondk/Development/kriskras-mvn-repo"))),
+    publishTo := Some(Resolver.file("file", new File("~/Development/sting-mvn-repo"))),
     dependencyOverrides ++= Seq(
       "org.scala-lang.modules" %% "scala-java8-compat" % "1.0.0"
     ),
@@ -346,7 +346,7 @@ lazy val PlayOpenIdProject = PlayCrossBuiltProject("Play-OpenID", "web/play-open
 
 lazy val PlayFiltersHelpersProject = PlayCrossBuiltProject("Filters-Helpers", "web/play-filters-helpers")
   .settings(
-    publishTo := Some(Resolver.file("file", new File("/Users/gideondk/Development/kriskras-mvn-repo"))),
+    publishTo := Some(Resolver.file("file", new File("~/Development/sting-mvn-repo"))),
     libraryDependencies ++= playFilterDeps,
     (Test / parallelExecution) := false
   )
@@ -364,7 +364,7 @@ lazy val PlayIntegrationTestProject = PlayCrossBuiltProject("Play-Integration-Te
   .settings(disablePublishing)
   .configs(IntegrationTest)
   .settings(
-    publishTo := Some(Resolver.file("file", new File("/Users/gideondk/Development/kriskras-mvn-repo"))),
+    publishTo := Some(Resolver.file("file", new File("~/Development/sting-mvn-repo"))),
     Defaults.itSettings,
     inConfig(IntegrationTest)(ScalafmtPlugin.scalafmtConfigSettings),
     headerSettings(IntegrationTest),
@@ -398,7 +398,7 @@ lazy val PlayMicrobenchmarkProject = PlayCrossBuiltProject("Play-Microbenchmark"
     dependencyOverrides ++= Seq(
       "org.scala-lang.modules" %% "scala-java8-compat" % "1.0.0"
     ),
-    publishTo := Some(Resolver.file("file", new File("/Users/gideondk/Development/kriskras-mvn-repo"))),
+    publishTo := Some(Resolver.file("file", new File("~/Development/sting-mvn-repo"))),
     // Change settings so that IntelliJ can handle dependencies
     // from JMH to the integration tests. We can't use "compile->test"
     // when we depend on the integration test project, we have to use
@@ -428,7 +428,7 @@ lazy val PlayMicrobenchmarkProject = PlayCrossBuiltProject("Play-Microbenchmark"
 
 lazy val PlayCacheProject = PlayCrossBuiltProject("Play-Cache", "cache/play-cache")
   .settings(
-    publishTo := Some(Resolver.file("file", new File("/Users/gideondk/Development/kriskras-mvn-repo"))),
+    publishTo := Some(Resolver.file("file", new File("~/Development/sting-mvn-repo"))),
     libraryDependencies ++= playCacheDeps
   )
   .dependsOn(
@@ -438,7 +438,7 @@ lazy val PlayCacheProject = PlayCrossBuiltProject("Play-Cache", "cache/play-cach
 
 lazy val PlayEhcacheProject = PlayCrossBuiltProject("Play-Ehcache", "cache/play-ehcache")
   .settings(
-    publishTo := Some(Resolver.file("file", new File("/Users/gideondk/Development/kriskras-mvn-repo"))),
+    publishTo := Some(Resolver.file("file", new File("~/Development/sting-mvn-repo"))),
     libraryDependencies ++= playEhcacheDeps
   )
   .dependsOn(
@@ -449,7 +449,7 @@ lazy val PlayEhcacheProject = PlayCrossBuiltProject("Play-Ehcache", "cache/play-
 
 lazy val PlayCaffeineCacheProject = PlayCrossBuiltProject("Play-Caffeine-Cache", "cache/play-caffeine-cache")
   .settings(
-    publishTo := Some(Resolver.file("file", new File("/Users/gideondk/Development/kriskras-mvn-repo"))),
+    publishTo := Some(Resolver.file("file", new File("~/Development/sting-mvn-repo"))),
     libraryDependencies ++= playCaffeineDeps
   )
   .dependsOn(
@@ -461,7 +461,7 @@ lazy val PlayCaffeineCacheProject = PlayCrossBuiltProject("Play-Caffeine-Cache",
 // JSR 107 cache bindings (note this does not depend on ehcache)
 lazy val PlayJCacheProject = PlayCrossBuiltProject("Play-JCache", "cache/play-jcache")
   .settings(
-    publishTo := Some(Resolver.file("file", new File("/Users/gideondk/Development/kriskras-mvn-repo"))),
+    publishTo := Some(Resolver.file("file", new File("~/Development/sting-mvn-repo"))),
     libraryDependencies ++= jcacheApi
   )
   .dependsOn(
@@ -474,7 +474,7 @@ lazy val PlayDocsSbtPlugin = PlaySbtPluginProject("Play-Docs-Sbt-Plugin", "dev-m
   .enablePlugins(SbtPlugin)
   .enablePlugins(SbtTwirl)
   .settings(
-    publishTo := Some(Resolver.file("file", new File("/Users/gideondk/Development/kriskras-mvn-repo"))),
+    publishTo := Some(Resolver.file("file", new File("~/Development/sting-mvn-repo"))),
     libraryDependencies ++= playDocsSbtPluginDependencies,
     scriptedDependencies := (()), // drop Test/compile & publishLocal being called on aggregating root scripted
   )
@@ -548,14 +548,14 @@ lazy val PlayFramework = Project("Play-Framework", file("."))
     Docs.apiDocsIncludeManaged := false,
     mimaReportBinaryIssues := (()),
     commands += Commands.quickPublish,
-    publishTo := Some(Resolver.file("file", new File("/Users/gideondk/Development/kriskras-mvn-repo"))),
+    publishTo := Some(Resolver.file("file", new File("~/Development/sting-mvn-repo"))),
     Release.settings,
     publish / skip := true,
   )
   .aggregate((userProjects ++ nonUserProjects): _*)
 
-ThisBuild / version ~= (x => "2.9.1-SNAPSHOT")
-ThisBuild / dynver  ~= (x => "2.9.1-SNAPSHOT")
+ThisBuild / version ~= (x => "2.9.0-SNAPSHOT")
+ThisBuild / dynver  ~= (x => "2.9.0-SNAPSHOT")
 
 addCommandAlias(
   "validateCode",
