@@ -184,7 +184,7 @@ lazy val PlayJdbcProject: Project = PlayCrossBuiltProject("Play-JDBC", "persiste
 lazy val PlayJdbcEvolutionsProject = PlayCrossBuiltProject("Play-JDBC-Evolutions", "persistence/play-jdbc-evolutions")
   .settings(
     publishTo := Some(Resolver.file("file", new File(System.getProperty("user.home") + "/Development/sting-mvn-repo"))),
-    libraryDependencies += derbyDatabase % Test
+    libraryDependencies ++= derbyDatabase.map(_ % Test)
   )
   .dependsOn(PlayJdbcApiProject)
   .dependsOn(PlaySpecs2Project % "test")
@@ -276,7 +276,7 @@ lazy val SbtPluginProject = PlaySbtPluginProject("Sbt-Plugin", "dev-mode/sbt-plu
     (Compile / sourceGenerators) += Def.task {
       PlayVersion(
         version.value,
-        "2.13.8",
+        "2.13.9",
         sbtVersion.value,
         Dependencies.akkaVersion,
         Dependencies.akkaHttpVersion,
@@ -536,7 +536,7 @@ lazy val PlayFramework = Project("Play-Framework", file("."))
   .settings(
     playCommonSettings,
     scalaVersion := (PlayProject / scalaVersion).value,
-    version := "2.9.0-SNAPSHOT",
+    version := "2.9.1-SNAPSHOT",
     dependencyOverrides ++= Seq(
       "org.scala-lang.modules" %% "scala-java8-compat" % "1.0.0"
     ),
@@ -549,7 +549,6 @@ lazy val PlayFramework = Project("Play-Framework", file("."))
     mimaReportBinaryIssues := (()),
     commands += Commands.quickPublish,
     publishTo := Some(Resolver.file("file", new File(System.getProperty("user.home") + "/Development/sting-mvn-repo"))),
-    Release.settings,
     publish / skip := true,
   )
   .aggregate((userProjects ++ nonUserProjects): _*)
